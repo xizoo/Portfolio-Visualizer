@@ -1,8 +1,6 @@
 from pandas_datareader import data as pdr
 import requests
 from datetime import datetime as dt
-import json
-
 
 #Different rates that you can extract, or use your own
 treasury_1 = "DGS1"
