@@ -1,5 +1,5 @@
 from resources.stockinfo import StockData
-
+#addcomment
 def display_duration_options():
     """Display all available duration options for the user."""
     print("\nAvailable Duration Options:")
