@@ -22,8 +22,8 @@ class StockData:
             print("No data found. Check inputs.")
             return None
 
-        stock['Returns'] = stock['Adj Close'].pct_change()
-        returns_df = stock[['Adj Close', 'Returns']].dropna().reset_index()
+        stock['Returns'] = stock['Close'].pct_change()
+        returns_df = stock[['Returns']].dropna().reset_index()
         print(returns_df.head())
         self.save_to_csv(returns_df, "intervalreturns", duration, interval)
         return returns_df
