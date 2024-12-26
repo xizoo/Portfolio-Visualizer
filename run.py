@@ -14,6 +14,7 @@ def display_duration_options():
     print(" - 10y  : Last 10 years")
     print(" - 30y  : Last 30 years")
     print(" - max  : All available data\n")
+    
 
 def get_valid_duration():
     while True:
