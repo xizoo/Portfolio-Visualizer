@@ -1,5 +1,5 @@
 # Financial Project
-###Project Description
+### Project Description
 -	Language: Python
 -	Main Purpose: Build portfolio
 -	Features: Risk diversification, Asset allocation
