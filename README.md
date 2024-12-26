@@ -1,17 +1,18 @@
-2.	Financial Project
--	Python
--	Build portfolio
--	Risk diversification
--	Asset allocation
--	Pandas yfinance seaborn
+# Financial Project
+###Project Description
+-	Language: Python
+-	Main Purpose: Build portfolio
+-	Features: Risk diversification, Asset allocation
+-	Packages Used: Pandas yfinance seaborn
 
+## Features
 1. Take in n markets
 2. Compute mean return, stdev(risk), correlation (diversification)
 3. Generate portfolio to maximise risk-return ratio
 4. Create asset allocation plan- balance risk free asset and mve portfolio
 5. End goal: make capital allocation plot
 
-Steps
+## Steps
 1. Extract data of markets (risky assets: small cap, large cap, japan, uk etc)
 2. Data wrangling by finding for the asset:
   a.	Find Daily Returns
