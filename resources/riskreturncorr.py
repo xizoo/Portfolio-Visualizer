@@ -3,76 +3,65 @@ import pandas as pd
 from datetime import datetime
 import os
 
-assets = input("list of asset, comma separated: ").split(",")
-duration = input("duration: ")
-interval = input("interval: ")
+class StockStats:
+    def __init__(self, assets, duration, interval):
+        self.assets = assets
+        self.duration = duration
+        self.interval = interval
+        self.stockmatrix = pd.DataFrame()
+        self._fetch_data()
 
-# Initialize an empty DataFrame with 'Date' as the index
-stockmatrix = pd.DataFrame()
+    def _fetch_data(self):
+        for asset in self.assets:
+            df = SI.StockData(asset).get_interval_returns(self.duration, self.interval)
+            df = df.dropna().reset_index(drop=True)
+            df.columns = ['Date', 'Returns']
+            df.set_index('Date', inplace=True)
+            df.rename(columns={'Returns': asset}, inplace=True)
+            if self.stockmatrix.empty:
+                self.stockmatrix = df
+            else:
+                self.stockmatrix = self.stockmatrix.join(df, how='outer')
+        self.stockmatrix.reset_index(inplace=True)
 
-# Loop through each asset and add its interval returns as a new column
-for asset in assets:
-    # Get the interval returns for the asset
-    df = SI.StockData(asset).get_interval_returns(duration, interval)
+    def calculate_mean_std(self):
+        stats = {
+            'Mean': self.stockmatrix.mean(),
+            'Standard Deviation': self.stockmatrix.std()
+        }
+        stats_df = pd.DataFrame(stats)
+        return stats_df
+
+    def calculate_correlation(self):
+        correlation_matrix = self.stockmatrix.corr()
+        return correlation_matrix
+
+    def save_to_csv(self, df, filename_suffix):
+        assets_str = ''.join(self.assets)
+        date_str = datetime.now().strftime("%d%m%Y%H%M")
+        filename = f"{assets_str}_{filename_suffix}_{date_str}.csv"
+        directory = "/Users/xizo/python-project---financial-analytics/stats"
+        os.makedirs(directory, exist_ok=True)
+        filepath = os.path.join(directory, filename)
+        df.to_csv(filepath)
+        print(f"Data saved to {filepath}")
+
+if __name__ == "__main__":
+    assets = input("list of asset, comma separated: ").split(",")
+    duration = input("duration: ")
+    interval = input("interval: ")
+
+    stock_stats = StockStats(assets, duration, interval)
+
+    # Calculate and save mean and standard deviation
+    mean_std_df = stock_stats.calculate_mean_std()
+    stock_stats.save_to_csv(mean_std_df, "meanstdev")
+
+    # Calculate and save correlation matrix
+    corr_matrix_df = stock_stats.calculate_correlation()
     
-    # Ensure the 'Date' column is correctly set as the index
-    df = df.dropna().reset_index(drop=True)
-    df.columns = ['Date', 'Returns']
-    df.set_index('Date', inplace=True)
-    df.rename(columns={'Returns': asset}, inplace=True)
+    # Remove 'Date' row and column if present
+    if 'Date' in corr_matrix_df.columns:
+        corr_matrix_df = corr_matrix_df.drop(columns='Date', index='Date')
     
-    # Merge with the main DataFrame
-    if stockmatrix.empty:
-        stockmatrix = df
-    else:
-        stockmatrix = stockmatrix.join(df, how='outer')
-
-# Reset the index to make 'Date' a column again
-stockmatrix.reset_index(inplace=True)
-
-# Calculate mean and standard deviation for each column
-stats = {
-    'Mean': stockmatrix.mean(),
-    'Standard Deviation': stockmatrix.std()
-}
-
-# Create a new DataFrame for the statistics
-stats_df = pd.DataFrame(stats)
-
-# Generate the filename for the statistics
-assets_str = ''.join(assets)
-date_str = datetime.now().strftime("%d%m%Y%H%M")
-stats_filename = f"{assets_str}_meanstdev_{date_str}.csv"
-
-# Define the directory to save the file
-directory = "/Users/xizo/python-project---financial-analytics/stats"
-
-# Create the directory if it doesn't exist
-os.makedirs(directory, exist_ok=True)
-
-# Full path to save the statistics file
-stats_filepath = os.path.join(directory, stats_filename)
-
-# Save the statistics DataFrame to a CSV file
-stats_df.to_csv(stats_filepath)
-
-# Display the statistics DataFrame
-print(stats_df)
-print(f"Statistics saved to {stats_filepath}")
-
-# Calculate the correlation matrix
-correlation_matrix = stockmatrix.corr()
-
-# Generate the filename for the correlation matrix
-corrmat_filename = f"{assets_str}_corrmat_{date_str}.csv"
-
-# Full path to save the correlation matrix file
-corrmat_filepath = os.path.join(directory, corrmat_filename)
-
-# Save the correlation matrix to a CSV file
-correlation_matrix.to_csv(corrmat_filepath)
-
-# Display the correlation matrix
-print("Correlation Matrix:")
-print(correlation_matrix)
-print(f"Correlation matrix saved to {corrmat_filepath}")
+    stock_stats.save_to_csv(corr_matrix_df, "corrmat")

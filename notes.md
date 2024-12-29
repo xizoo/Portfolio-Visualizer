@@ -82,3 +82,16 @@
 
 - **Balancing Simplicity and Efficiency**:
     - Avoid over-engineering. Simplifying logic (e.g., direct "max" input) makes the program cleaner and faster.
+
+
+### 2. Data Wrangling
+New file riskreturncorr.py is now able to find risk, return and correlation between multiple stocks.
+This is the start of the modern porfolio theory.
+
+#### Learning points
+- Reusing past resources to reduce workload: Because stockinfo.py already exist to collect data, we used functions within stockinfo.py to simplify the data collection process.
+- Cleaning files: Because stockinfo.py always saves to CSV, one solution implemented is to create a datareset.py that cleans out the data folder to avoid too much junk.
+- Implementation of class to wrap the whole function for user accessibility: Similar to stockinfo.py, wrapping the whole function within a class and using methods to call the individual functions like calculate_mean_std and calculate_correlation makes it easier for users to run without having to edit code.
+
+#### Lessons learnt:
+Because corr, mean, and stdev are already inbuilt functions, calculating them is really simple. However, there are bound to be inaccuracies, like the calculate_correlation() method calculating for every column, including the date column. Thus, checking is required to ensure that all information is correctly implemented.
