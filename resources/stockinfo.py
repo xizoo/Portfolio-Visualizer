@@ -22,8 +22,8 @@ class StockData:
             print("No data found. Check inputs.")
             return None
 
-        stock['Returns'] = stock['Adj Close'].pct_change()
-        returns_df = stock[['Adj Close', 'Returns']].dropna().reset_index()
+        stock['Returns'] = stock['Close'].pct_change()
+        returns_df = stock[['Returns']].dropna().reset_index()
         print(returns_df.head())
         self.save_to_csv(returns_df, "intervalreturns", duration, interval)
         return returns_df
@@ -184,10 +184,3 @@ class StockData:
             file_path = os.path.join(output_folder, file_name)
             df.to_csv(file_path, index=False)
             print(f"Data saved to {file_path}")
-
-
-
-aapl=StockData("AAPL")
-aapl.get_total_return('5y','1mo')
-
-

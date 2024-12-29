@@ -1,8 +1,8 @@
 import stockinfo as si
 import pandas as pd
-
+"""
 def get_total_return(self, duration: str, interval: str) -> pd.DataFrame:
-    """
+    
     Computes total return between each interval.
     Adjusts dividends time format to align with price data.
 
@@ -15,7 +15,7 @@ def get_total_return(self, duration: str, interval: str) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: A DataFrame with the total return percentages.
-    """
+    
     print(f"\nFetching total returns for {self.ticker}...")
 
     # Fetch price and dividend data
@@ -46,7 +46,7 @@ def calculate_adjusted_price(price_df, dividend_df, interval: str) -> pd.DataFra
     }
     resample_freq = interval_map.get(interval.lower(), 'M')  # Default to 'M' if interval is not in the map
 
-    """
+    
     Adjusts the price DataFrame to account for dividends, aggregated by a given interval.
 
     Parameters:
@@ -56,7 +56,7 @@ def calculate_adjusted_price(price_df, dividend_df, interval: str) -> pd.DataFra
 
     Returns:
         pd.DataFrame: Updated price DataFrame with an additional column ['Adj Price'].
-    """
+    
     # Ensure both Date columns are consistent in format
     price_df['Date'] = pd.to_datetime(price_df['Date'])
     dividend_df['Date'] = pd.to_datetime(dividend_df['Date'])
@@ -77,3 +77,4 @@ def calculate_adjusted_price(price_df, dividend_df, interval: str) -> pd.DataFra
     merged_df['Adj Price'] = merged_df['Close'] + merged_df['Dividend']
 
     return merged_df
+    """
