@@ -15,8 +15,8 @@
 ## Steps
 1. ✅Extract data of markets (risky assets: small cap, large cap, japan, uk etc)
 2. ✅Data wrangling by finding for the asset:
-  a.	Find Daily Returns✅
-  b.	Mean, stdev and correlation of each individual market’s return✅
+  - a.	Find Daily Returns✅
+  - b.	Mean, stdev and correlation of each individual market’s return✅
 3. Apply Prescriptive analytics:
   -	Find minimum variance portfolio
   -	Find maximum sharpe ratio portfolio
