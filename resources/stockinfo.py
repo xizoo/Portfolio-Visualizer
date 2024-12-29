@@ -184,10 +184,3 @@ class StockData:
             file_path = os.path.join(output_folder, file_name)
             df.to_csv(file_path, index=False)
             print(f"Data saved to {file_path}")
-
-
-
-aapl=StockData("AAPL")
-aapl.get_total_return('5y','1mo')
-
-
