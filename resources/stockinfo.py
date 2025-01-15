@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 
-class StockData:
+class Asset:
     """
     A class to fetch and analyze stock data using Yahoo Finance API.
 
