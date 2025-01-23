@@ -1,4 +1,4 @@
-from resources.stockinfo import StockData
+from resources.stockinfo import Asset
 #addcomment
 def display_duration_options():
     """Display all available duration options for the user."""
@@ -28,7 +28,7 @@ def main():
     print("\n--- Welcome to the Stock Data Program ---\n")
     ticker = input("Enter the stock ticker symbol (e.g., AAPL): ").strip().upper()
 
-    stock = StockData(ticker)
+    stock = Asset(ticker)
 
     print("\nSelect the type of program to run:")
     print("1. Interval Returns")
