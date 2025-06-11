@@ -2,7 +2,6 @@ from pandas_datareader import data as pdr
 import datetime
 
 
-fdshagfhashgaHELLO
 start = datetime.datetime(2000, 1, 1)
 end = datetime.datetime(2023, 12, 31)
 
