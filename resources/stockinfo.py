@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 
-aapl= yf.download(tickers="AAPL",period="3y",interval="daily")
+aapl= yf.download(tickers="AAPL",period="3y",interval="W")
 
 # class StockData:
 #     """
