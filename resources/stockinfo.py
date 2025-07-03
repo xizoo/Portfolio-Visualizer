@@ -15,40 +15,22 @@ class StockData:
         self.ticker = ticker.upper()
         print(f"Initialized StockData class for ticker: {self.ticker}")
 
+    # Function to get_interval_returns
     def get_interval_returns(self, duration: str, interval: str) -> pd.DataFrame:
         print(f"\nFetching interval returns for {self.ticker}...")
+        # Obtain stock info for given duration and interval
         stock = yf.download(tickers=self.ticker, period=duration, interval=interval)
+        # Catch error if no stock
         if stock.empty:
             print("No data found. Check inputs.")
             return None
-
-        stock['Returns'] = stock['Adj Close'].pct_change()
-        returns_df = stock[['Adj Close', 'Returns']].dropna().reset_index()
-        print(returns_df.head())
-        self.save_to_csv(returns_df, "intervalreturns", duration, interval)
+        # Calculate Returns of Adj Close Price
+        stock['Returns'] = stock['Close'].pct_change()
+        # Remove NA Values, only keep returns
+        returns_df = stock[['Returns']].dropna().reset_index()
+        # Stopped saving CSV to save storage
+        #self.save_to_csv(returns_df, "intervalreturns", duration, interval)
         return returns_df
-
-    def get_price(self, duration: str, interval: str, pricetype: str = None) -> pd.DataFrame:
-        print(f"\nFetching price data for {self.ticker}...")
-        stock = yf.download(tickers=self.ticker, period=duration, interval=interval)
-        if stock.empty:
-            print("No data found. Check inputs.")
-            return None
-
-        datatype = pricetype or "allprices"
-        if pricetype:
-            pricetype = pricetype.title()
-            if pricetype in stock.columns:
-                result_df = stock[[pricetype]].reset_index()
-            else:
-                print(f"Invalid pricetype '{pricetype}'. Options: Open, High, Low, Close, Adj Close.")
-                return None
-        else:
-            result_df = stock.reset_index()
-
-        print(result_df.head())
-        self.save_to_csv(result_df, datatype, duration, interval)
-        return result_df
 
     def get_balance(self) -> pd.DataFrame:
         print(f"\nFetching balance sheet for {self.ticker}...")
@@ -189,6 +171,4 @@ class StockData:
 
 
 aapl=StockData("AAPL")
-aapl.get_total_return('5y','mo')
-
-
+return_test= aapl.get_interval_returns('1y','1wk')
