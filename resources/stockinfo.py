@@ -31,36 +31,6 @@ class StockData:
         # Stopped saving CSV to save storage
         #self.save_to_csv(returns_df, "intervalreturns", duration, interval)
         return returns_df
-
-    def get_balance(self) -> pd.DataFrame:
-        print(f"\nFetching balance sheet for {self.ticker}...")
-        stock = yf.Ticker(self.ticker)
-        balance_sheet = stock.balance_sheet
-        if balance_sheet is not None and not balance_sheet.empty:
-            balance_df = balance_sheet.T.reset_index()
-            balance_df.columns = ['Date'] + list(balance_df.columns[1:])
-            print(balance_df.head())
-            self.save_to_csv(balance_df, "balancesheet", "N/A", "quarterly")
-            return balance_df
-        print("No balance sheet available.")
-        return None
-    
-    def get_dividend(self, duration: str) -> pd.DataFrame:
-        print(f"\nFetching dividend payouts for {self.ticker}...")
-        stock = yf.Ticker(self.ticker)
-        dividends = stock.history(period=duration).get('Dividends')
-
-        if dividends is None or dividends.empty:
-            print("No dividend data available.")
-            return None
-
-        # Create a DataFrame from the dividends data
-        dividend_df = dividends.reset_index()
-        dividend_df.columns = ['Date', 'Dividend']
-        print(dividend_df.head())
-
-        self.save_to_csv(dividend_df, "dividends", duration, "")
-        return dividend_df
     
     def get_total_return(self, duration: str, interval: str) -> pd.DataFrame:
         """
@@ -90,8 +60,6 @@ class StockData:
         # Flatten multi-level columns in stock_prices
         stock_prices.columns = stock_prices.columns.droplevel(1)  # Keep only the second level of the header
 
-        print(stock_prices.head())        
-        print(dividends.head())
         def calculate_adjusted_price(price_df, dividend_df, interval: str) -> pd.DataFrame:
             interval_map = {
                 '1d': 'D',
