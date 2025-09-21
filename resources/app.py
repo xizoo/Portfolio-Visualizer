@@ -24,7 +24,6 @@
 
 
 # Import Library
-import mercury as mr
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -49,45 +48,54 @@ assetlist = ["META","BA","GOOGL","TSM","AAPL","VOO"]
 # Risk Free Rate
 asset_risk_free = 0.02
 
-
-# ## Data Prep and Extraction
-# 
-
 # In[79]:
 
 
 # Get Stock Risk Return and Correlation
-
+# get_data(list_of_tickers): -> {asset_risk_return: riskreturndf, asset_correlation: correlationdf}
 # Using YFinance to obtain stock close Price
-stock_price = yf.download(tickers=assetlist,period = "10y", interval ="1mo")
-# Find stock return
-stock_return = stock_price["Close"].pct_change().dropna()
+def get_data(assetlist,asset_risk_free=0.03):
 
-# Get mean and stdev of the stocks
-monthly_mean_return = stock_return.mean()
-monthly_stdev_return = np.std(stock_return,axis=0)
+    """
+    Fetches monthly historical stock data for a list of tickers,
+    computes annualized return, deviation, Sharpe ratio, and correlation matrix.
 
-# Annualize 
-mean_return = monthly_mean_return * 12
-stdev_return = monthly_stdev_return * np.sqrt(12)
+    Parameters:
+    - assetlist: list of ticker strings
+    - asset_risk_free: annualized risk-free rate (default 3%)
 
-# Merge into a table
-asset_risk_return_df = pd.DataFrame([mean_return, stdev_return],index=["Return", "Deviation"]).T 
+    Returns:
+    - dict with 'asset_risk_return' and 'asset_correlation' DataFrames
+    """ 
+    stock_price = yf.download(tickers=assetlist,period = "10y", interval ="1mo")
 
-#Find Sharpe Ratio
-asset_risk_return_df["Sharpe"] = (
-    asset_risk_return_df["Return"] - asset_risk_free
-) / asset_risk_return_df["Deviation"]
+    # Find stock return
+    stock_return = stock_price["Close"].pct_change().dropna()
 
-# Get correlation between each stock
-asset_correlation_matrix_df= stock_return.corr()
+    # Get mean and stdev of the stocks
+    monthly_mean_return = stock_return.mean()
+    monthly_stdev_return = np.std(stock_return,axis=0)
 
+    # Annualize 
+    mean_return = monthly_mean_return * 12
+    stdev_return = monthly_stdev_return * np.sqrt(12)
 
-# # Part 2: N Asset Optimization
-# 
+    # Merge into a table
+    asset_risk_return_df = pd.DataFrame([mean_return, stdev_return],index=["Return", "Deviation"]).T 
 
-# ### GMV Portfolio
-# 
+    #Find Sharpe Ratio
+    asset_risk_return_df["Sharpe"] = (
+        asset_risk_return_df["Return"] - asset_risk_free
+    ) / asset_risk_return_df["Deviation"]
+
+    # Get correlation between each stock
+    asset_correlation_matrix_df= stock_return.corr()
+
+    returndict={}
+    returndict["asset_risk_return"]= asset_risk_return_df
+    returndict["asset_correlation"]= asset_correlation_matrix_df
+
+    return returndict
 
 # In[80]:
 
